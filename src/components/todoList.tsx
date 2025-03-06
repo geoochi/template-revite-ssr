@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 interface Todo {
   id: number
@@ -50,35 +51,42 @@ const TodoList: React.FC = () => {
   }
 
   return (
-    <div className='max-w-sm w-full'>
-      <h1 className='text-2xl font-bold mb-4'>Todo List</h1>
-      <form onSubmit={addTodo} className='mb-4'>
-        <input
-          type='text'
-          value={newTodo}
-          onChange={e => setNewTodo(e.target.value)}
-          placeholder='Add new todo'
-          className='w-full p-2 border rounded'
-        />
-      </form>
-      <ul className='space-y-2'>
-        {todos.map(todo => (
-          <li key={todo.id} className='flex items-center justify-between p-2 border rounded'>
-            <div className='flex items-center'>
-              <input
-                type='checkbox'
-                checked={todo.completed}
-                onChange={() => toggleTodo(todo.id, todo.completed)}
-                className='mr-2'
-              />
-              <span className={todo.completed ? 'line-through' : ''}>{todo.title}</span>
-            </div>
-            <button onClick={() => deleteTodo(todo.id)} className='text-red-500'>
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div className='flex flex-col items-center'>
+      <div className='max-w-sm w-full'>
+        <div className='flex justify-between items-center mb-4'>
+          <h1 className='text-2xl font-bold mb-4'>Todo List</h1>
+          <Link to='/about' className='text-blue-500'>
+            About
+          </Link>
+        </div>
+        <form onSubmit={addTodo} className='mb-4'>
+          <input
+            type='text'
+            value={newTodo}
+            onChange={e => setNewTodo(e.target.value)}
+            placeholder='Add new todo'
+            className='w-full p-2 border rounded'
+          />
+        </form>
+        <ul className='space-y-2'>
+          {todos.map(todo => (
+            <li key={todo.id} className='flex items-center justify-between p-2 border rounded'>
+              <div className='flex items-center'>
+                <input
+                  type='checkbox'
+                  checked={todo.completed}
+                  onChange={() => toggleTodo(todo.id, todo.completed)}
+                  className='mr-2'
+                />
+                <span className={todo.completed ? 'line-through' : ''}>{todo.title}</span>
+              </div>
+              <button onClick={() => deleteTodo(todo.id)} className='text-red-500'>
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }
