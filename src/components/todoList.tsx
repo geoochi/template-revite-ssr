@@ -55,7 +55,7 @@ const TodoList: React.FC = () => {
       <div className='max-w-sm w-full'>
         <div className='flex justify-between items-center mb-4'>
           <h1 className='text-2xl font-bold mb-4'>Todo List</h1>
-          <Link to='/about' className='text-blue-500'>
+          <Link to='/about' className='text-blue-500 underline'>
             About
           </Link>
         </div>

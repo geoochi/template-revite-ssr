@@ -48,6 +48,13 @@ app.delete('/api/todos/:id', async (req, res) => {
   res.json({ message: 'Todo deleted' })
 })
 
+// Handle 404 for unmatched API routes
+app.use('/api*', (req, res) => {
+  res.status(404).json({
+    error: 'API endpoint not found',
+  })
+})
+
 // SSR logic
 let vite: any
 const isProd = process.env.NODE_ENV === 'production'

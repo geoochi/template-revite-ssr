@@ -2,7 +2,7 @@
   "type": "module",
   "packageManager": "pnpm@10.5.0",
   "scripts": {
-    "d": "node server-ssr.ts",
+    "d": "nodemon server-ssr.ts",
     "b": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client",
     "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
