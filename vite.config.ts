@@ -13,4 +13,15 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        app: './index.html',
+      },
+    },
+    outDir: 'dist/client',
+  },
+  ssr: {
+    target: 'node',
+  },
 })
