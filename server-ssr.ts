@@ -73,7 +73,7 @@ app.use('*', async (req, res, next) => {
   // Skip SSR for non-HTML requests
   if (!url.startsWith('/api/') && !url.match(/\.(js|css|ico|png|jpg|jpeg|gif|svg)$/)) {
     try {
-      console.log('Handling SSR request for URL:', url)
+      // console.log('Handling SSR request for URL:', url)
 
       let template: string
       let render: (url: string) => { html: string }
@@ -83,24 +83,24 @@ app.use('*', async (req, res, next) => {
         template = await vite.transformIndexHtml(url, template)
         render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render
       } else {
-        console.log('Production mode: Loading template and server entry')
+        // console.log('Production mode: Loading template and server entry')
         const templatePath = path.resolve(__dirname, 'dist/client/index.html')
         const serverEntryPath = path.resolve(__dirname, 'dist/server/entry-server.js')
 
-        console.log('Template path:', templatePath)
-        console.log('Server entry path:', serverEntryPath)
+        // console.log('Template path:', templatePath)
+        // console.log('Server entry path:', serverEntryPath)
 
         template = fs.readFileSync(templatePath, 'utf-8')
-        console.log('Template loaded:', template.includes('<!--app-html-->'))
+        // console.log('Template loaded:', template.includes('<!--app-html-->'))
 
         const serverEntry = await import(`file://${serverEntryPath}`)
-        console.log('Server entry loaded:', !!serverEntry.render)
+        // console.log('Server entry loaded:', !!serverEntry.render)
         render = serverEntry.render
       }
 
-      console.log('Server rendering for URL:', url)
+      // console.log('Server rendering for URL:', url)
       const { html: appHtml } = render(url)
-      console.log('Server rendered HTML length:', appHtml.length)
+      // console.log('Server rendered HTML length:', appHtml.length)
       const html = template.replace('<!--app-html-->', appHtml)
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
