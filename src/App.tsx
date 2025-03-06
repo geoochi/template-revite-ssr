@@ -1,12 +1,17 @@
-import { Routes, Route } from 'react-router-dom';
-import TodoList from './components/Todo';
+import { Routes, Route } from 'react-router-dom'
+import TodoList from './components/todoList'
+import About from './components/about'
+import Layout from './components/layout'
 
-function App() {
+const App: React.FC = () => {
   return (
-    <Routes>
-      <Route path="/" element={<TodoList />} />
-    </Routes>
-  );
+    <Layout>
+      <Routes>
+        <Route path='/' element={<TodoList />} />
+        <Route path='/about' element={<About />} />
+      </Routes>
+    </Layout>
+  )
 }
 
-export default App;
+export default App
