@@ -103,7 +103,6 @@ app.use('*', async (req, res, next) => {
       console.log('Server rendered HTML length:', appHtml.length)
       const html = template.replace('<!--app-html-->', appHtml)
 
-
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e: any) {
       console.error('SSR Error:', e)
