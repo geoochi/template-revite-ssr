@@ -42,10 +42,15 @@ app.put('/api/todos/:id', async (req, res) => {
 // delete todo
 app.delete('/api/todos/:id', async (req, res) => {
   const { id } = req.params
-  await prisma.todo.delete({
-    where: { id: Number(id) },
-  })
-  res.json({ message: 'Todo deleted' })
+  try {
+    await prisma.todo.delete({
+      where: { id: Number(id) },
+    })
+    res.json({ message: 'Todo deleted' })
+  } catch (e: any) {
+    console.error('Error deleting todo:', e)
+    res.status(500).json({ error: 'Failed to delete todo' })
+  }
 })
 
 // Handle 404 for unmatched API routes
