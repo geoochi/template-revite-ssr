@@ -6,7 +6,7 @@
     "b": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client",
     "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
-    "p": "NODE_ENV=production node server-ssr.ts",
+    "p": "cross-env NODE_ENV=production node server-ssr.ts",
     "q": "prisma studio"
   },
   "dependencies": {
@@ -27,6 +27,7 @@
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.3.4",
+    "cross-env": "^7.0.3",
     "nodemon": "^3.1.9",
     "prisma": "^6.4.1",
     "tailwindcss": "^4.0.10",
