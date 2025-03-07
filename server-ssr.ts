@@ -22,21 +22,31 @@ app.get('/api/todos', async (req, res) => {
 // create todo
 app.post('/api/todos', async (req, res) => {
   const { title } = req.body
-  const todo = await prisma.todo.create({
-    data: { title },
-  })
-  res.json(todo)
+  try {
+    const todo = await prisma.todo.create({
+      data: { title },
+    })
+    res.json(todo)
+  } catch (e: any) {
+    console.error('Error creating todo:', e)
+    res.status(500).json({ error: 'Failed to create todo' })
+  }
 })
 
 // update todo
 app.put('/api/todos/:id', async (req, res) => {
   const { id } = req.params
   const { completed } = req.body
-  const todo = await prisma.todo.update({
-    where: { id: Number(id) },
-    data: { completed },
-  })
-  res.json(todo)
+  try {
+    const todo = await prisma.todo.update({
+      where: { id: Number(id) },
+      data: { completed },
+    })
+    res.json(todo)
+  } catch (e: any) {
+    console.error('Error updating todo:', e)
+    res.status(500).json({ error: 'Failed to update todo' })
+  }
 })
 
 // delete todo
