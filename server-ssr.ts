@@ -93,47 +93,42 @@ app.use('*', async (req, res, next) => {
   const url = req.originalUrl
 
   // Skip SSR for non-HTML requests
-  if (!url.startsWith('/api/') && !url.match(/\.(js|css|ico|png|jpg|jpeg|gif|svg)$/)) {
-    try {
-      // console.log('Handling SSR request for URL:', url)
+  try {
+    // console.log('Handling SSR request for URL:', url)
 
-      let template: string
-      let render: (url: string) => { html: string }
+    let template: string
+    let render: (url: string) => { html: string }
 
-      if (!isProd) {
-        template = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf-8')
-        template = await vite.transformIndexHtml(url, template)
-        render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render
-      } else {
-        // console.log('Production mode: Loading template and server entry')
-        const templatePath = path.resolve(__dirname, 'dist/client/index.html')
-        const serverEntryPath = path.resolve(__dirname, 'dist/server/entry-server.js')
+    if (!isProd) {
+      template = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf-8')
+      template = await vite.transformIndexHtml(url, template)
+      render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render
+    } else {
+      // console.log('Production mode: Loading template and server entry')
+      template = fs.readFileSync(path.resolve(__dirname, 'dist/client/index.html'), 'utf-8')
+      const serverEntryPath = path.resolve(__dirname, 'dist/server/entry-server.js')
 
-        // console.log('Template path:', templatePath)
-        // console.log('Server entry path:', serverEntryPath)
+      // console.log('Template path:', templatePath)
+      // console.log('Server entry path:', serverEntryPath)
 
-        template = fs.readFileSync(templatePath, 'utf-8')
-        // console.log('Template loaded:', template.includes('<!--app-html-->'))
+      // console.log('Template loaded:', template.includes('<!--app-html-->'))
 
-        const serverEntry = await import(`file://${serverEntryPath}`)
-        // console.log('Server entry loaded:', !!serverEntry.render)
-        render = serverEntry.render
-      }
-
-      // console.log('Server rendering for URL:', url)
-      const { html: appHtml } = render(url)
-      // console.log('Server rendered HTML length:', appHtml.length)
-      const html = template.replace('<!--app-html-->', appHtml)
-
-      res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
-    } catch (e: any) {
-      console.error('SSR Error:', e)
-      vite?.ssrFixStacktrace(e)
-      console.error(e.stack)
-      res.status(500).end(e.stack)
+      const serverEntry = await import(`file://${serverEntryPath}`)
+      // console.log('Server entry loaded:', !!serverEntry.render)
+      render = serverEntry.render
     }
-  } else {
-    next()
+
+    // console.log('Server rendering for URL:', url)
+    const { html: appHtml } = render(url)
+    // console.log('Server rendered HTML length:', appHtml.length)
+    const html = template.replace('<!--app-html-->', appHtml)
+
+    res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
+  } catch (e: any) {
+    console.error('SSR Error:', e)
+    vite?.ssrFixStacktrace(e)
+    console.error(e.stack)
+    res.status(500).end(e.stack)
   }
 })
 
