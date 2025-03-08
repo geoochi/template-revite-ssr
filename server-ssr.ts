@@ -89,47 +89,22 @@ if (!isProd) {
   )
 }
 
-app.use('*', async (req, res, next) => {
+app.use('*', async (req, res, _next) => {
   const url = req.originalUrl
-
-  // Skip SSR for non-HTML requests
-  try {
-    // console.log('Handling SSR request for URL:', url)
-
-    let template: string
-    let render: (url: string) => { html: string }
-
-    if (!isProd) {
-      template = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf-8')
-      template = await vite.transformIndexHtml(url, template)
-      render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render
-    } else {
-      // console.log('Production mode: Loading template and server entry')
-      template = fs.readFileSync(path.resolve(__dirname, 'dist/client/index.html'), 'utf-8')
-      const serverEntryPath = path.resolve(__dirname, 'dist/server/entry-server.js')
-
-      // console.log('Template path:', templatePath)
-      // console.log('Server entry path:', serverEntryPath)
-
-      // console.log('Template loaded:', template.includes('<!--app-html-->'))
-
-      const serverEntry = await import(`file://${serverEntryPath}`)
-      // console.log('Server entry loaded:', !!serverEntry.render)
-      render = serverEntry.render
-    }
-
-    // console.log('Server rendering for URL:', url)
-    const { html: appHtml } = render(url)
-    // console.log('Server rendered HTML length:', appHtml.length)
-    const html = template.replace('<!--app-html-->', appHtml)
-
-    res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
-  } catch (e: any) {
-    console.error('SSR Error:', e)
-    vite?.ssrFixStacktrace(e)
-    console.error(e.stack)
-    res.status(500).end(e.stack)
+  let template: string
+  let render: (url: string) => { html: string }
+  if (!isProd) {
+    template = fs.readFileSync('index.html', 'utf-8')
+    template = await vite.transformIndexHtml(url, template)
+    render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render
+  } else {
+    template = fs.readFileSync(path.resolve(__dirname, 'dist/client/index.html'), 'utf-8')
+    const serverEntry = await import(path.resolve(__dirname, 'dist/server/entry-server.js'))
+    render = serverEntry.render
   }
+  const { html: appHtml } = render(url)
+  const html = template.replace('<!--app-html-->', appHtml)
+  res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
 })
 
 const PORT = 3004
