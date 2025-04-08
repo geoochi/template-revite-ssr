@@ -10,32 +10,34 @@
     "q": "prisma studio"
   },
   "dependencies": {
-    "@prisma/client": "^6.4.1",
+    "@prisma/client": "^6.5.0",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.30.0",
-    "tailwind-merge": "^3.0.2",
+    "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.0.12",
+    "@tailwindcss/vite": "^4.1.3",
     "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
+    "@types/express": "^5.0.1",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
     "@vitejs/plugin-react": "^4.3.4",
     "nodemon": "^3.1.9",
-    "prisma": "^6.4.1",
-    "tailwindcss": "^4.0.12",
-    "typescript": "^5.8.2",
-    "vite": "^6.2.1"
+    "prisma": "^6.5.0",
+    "tailwindcss": "^4.1.3",
+    "typescript": "^5.8.3",
+    "vite": "^6.2.5"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
       "@prisma/client",
+      "@prisma/engines",
+      "esbuild",
       "prisma"
     ]
   }
